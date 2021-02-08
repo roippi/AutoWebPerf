@@ -718,7 +718,7 @@ class AutoWebPerf {
         newResult.errors = this.getOverallErrors(newResult);
 
         // After each run
-        extResponse = this.runExtensions(extensions, 'afterRun', {
+        extResponse = await this.runExtensions(extensions, 'afterRun', {
           test: test,
           result: newResult,
         });
@@ -759,21 +759,21 @@ class AutoWebPerf {
    * - verbose {boolean}: Whether to show verbose messages in terminal.
    * - debug {boolean}: Whether to show debug messages in terminal.
    */
-  runExtensions(extensions, functionName, context, options) {
+  async runExtensions(extensions, functionName, context, options) {
     let errors = [];
 
-    extensions.forEach(extName => {
+    await Promise.all(extensions.map(extName => {
       try {
         if (!this.extensions[extName]) return;
         let extension = this.extensions[extName];
-        if (extension[functionName]) Promise.resolve(extension[functionName](context, options));
+        if (extension[functionName]) return Promise.resolve(extension[functionName](context, options));
       } catch (e) {
         if (this.debug) {
           console.error(e.stack);
         }
         errors.push(e);
       }
-    });
+    }));
 
     return {
       errors: errors

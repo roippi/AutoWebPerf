@@ -22,7 +22,9 @@ class ThrottleExtension extends Extension {
 
   afterRun(context, options) {
     return new Promise((r) => {
-      setTimeout(() => r(), 1000);
+      setTimeout(() => {
+        r();
+      }, 500);
     });
   }
 }
