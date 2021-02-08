@@ -158,6 +158,10 @@ class AutoWebPerf {
             ExtensionClass = require('./extensions/appscript-extension');
             break;
 
+          case 'throttle':
+            ExtensionClass = require('./extensions/throttle-extension');
+            break;
+
           default:
             throw new Error(
                 `Extension ${extension} is not supported.`);
@@ -762,7 +766,7 @@ class AutoWebPerf {
       try {
         if (!this.extensions[extName]) return;
         let extension = this.extensions[extName];
-        if (extension[functionName]) extension[functionName](context, options);
+        if (extension[functionName]) Promise.resolve(extension[functionName](context, options));
       } catch (e) {
         if (this.debug) {
           console.error(e.stack);
