@@ -7,4 +7,5 @@ dist/
 stats.html
 .cache
 .DS_Store
+.idea
 service_accounts
